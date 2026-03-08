@@ -17,13 +17,15 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/ZoroHunter-007/AuthApplication.git'
+                git branch: 'main', url: 'https://github.com/ZoroHunter-007/MicroServiceProject.git'
             }
         }
 
         stage('Build Maven Project') {
             steps {
-                bat 'mvn clean package -DskipTests'
+                dir('AuthApplication') {
+                    bat 'mvn clean package -DskipTests'
+                }
             }
         }
 
@@ -35,7 +37,9 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build --no-cache -t %IMAGE_NAME% .'
+                dir('AuthApplication') {
+                    bat 'docker build --no-cache -t %IMAGE_NAME% .'
+                }
             }
         }
 
@@ -46,11 +50,13 @@ pipeline {
             }
         }
 
-       stage('Run Docker Compose') {
-    steps {
-        bat 'docker compose down'
-        bat 'docker compose up -d --build'
-    }
-}
+        stage('Run Docker Compose') {
+            steps {
+                dir('AuthApplication') {
+                    bat 'docker compose down'
+                    bat 'docker compose up -d --build'
+                }
+            }
+        }
     }
 }
