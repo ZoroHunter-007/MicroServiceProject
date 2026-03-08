@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'JDK21'
+        maven 'Maven'
+    }
+
+    environment {
+        IMAGE_NAME = "authapplication-image"
+        CONTAINER_NAME = "auth-container"
+        HOST_PORT = "8082"
+        CONTAINER_PORT = "8081"
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ZoroHunter-007/AuthApplication.git'
+            }
+        }
+
+        stage('Build Maven Project') {
+            steps {
+                bat 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Remove Old Docker Image') {
+            steps {
+                bat 'docker rmi %IMAGE_NAME% || exit 0'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build --no-cache -t %IMAGE_NAME% .'
+            }
+        }
+
+        stage('Stop Old Container') {
+            steps {
+                bat 'docker stop %CONTAINER_NAME% || exit 0'
+                bat 'docker rm %CONTAINER_NAME% || exit 0'
+            }
+        }
+
+       stage('Run Docker Compose') {
+    steps {
+        bat 'docker compose down'
+        bat 'docker compose up -d --build'
+    }
+}
+    }
+}
