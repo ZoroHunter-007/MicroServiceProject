@@ -3,6 +3,10 @@ package com.RedisRabbitMQ.AuthApplication.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -80,6 +84,7 @@ public class UserServiceImpl implements UserService{
 				response);
 	}
 
+	@Cacheable(value = "getAllUsers")
 	@Override
 	public AuthResponse<List<UserResponse>> getAllUser() {
 		// TODO Auto-generated method stub
@@ -99,6 +104,7 @@ public class UserServiceImpl implements UserService{
 				users);
 	}
 
+	@Cacheable(value = "users", key = "#email")
 	@Override
 	public AuthResponse<UserResponse> getUserByEmail(String email) {
 		// TODO Auto-generated method stub
@@ -117,6 +123,12 @@ public class UserServiceImpl implements UserService{
 				response);
 	}
 
+	@Caching(put = {
+			@CachePut(value = "users", key="#email")
+	}
+	, evict = {
+			@CacheEvict(value = "getAllUsers",allEntries = true)
+	})
 	@Override
 	public AuthResponse<UserResponse> updateUser(RegisterRequest dto, String email) {
 		// TODO Auto-generated method stub
@@ -144,6 +156,10 @@ public class UserServiceImpl implements UserService{
 				"User "+email+ " Updated Successfully...",
 				response);
 	}
+	@Caching(evict = {
+			@CacheEvict(value = "users", key = "#email",beforeInvocation = true),
+			@CacheEvict(value = "getAllUsers",allEntries = true)
+	})
 
 	@Override
 	public AuthResponse<UserResponse> deleteUserByEmail(String email) {

@@ -56,7 +56,7 @@ public class AuthController {
 
 	    return ResponseEntity.ok("Logout successful");
 	}
-	
+	//Get All Users 
 	@GetMapping("/users")
 	public ResponseEntity<AuthResponse<List<UserResponse>>>getAllUsers(){
 		
@@ -64,12 +64,14 @@ public class AuthController {
 		
 	}
 	
+	//Get Users by Email
 	@GetMapping("/users/{email}")
 	public ResponseEntity<AuthResponse<UserResponse>>getUserByEmail(@PathVariable String email){
 		
 		return ResponseEntity.ok(serviceImpl.getUserByEmail(email));
 	}
 	
+	//
 	@PutMapping("/update/{email}")
 	public ResponseEntity<AuthResponse<UserResponse>>updateUserByEmail(
 			@Valid @RequestBody RegisterRequest dto, @PathVariable String email){
