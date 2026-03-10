@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService{
 		User savedUser=userRepository.save(user);
 		
 		UserResponse response=new UserResponse(
-				savedUser.getId(), 
+				savedUser.getUserId(), 
 				savedUser.getEmail(),
 				savedUser.getUsername(),
 				savedUser.getDepartment());
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService{
 		List<UserResponse>users=userRepository.findAll()
 				.stream()
 				.map(user->new UserResponse(
-						user.getId(), 
+						user.getUserId(), 
 						user.getEmail(), 
 						user.getUsername(),
 						user.getDepartment())
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService{
 				orElseThrow(()-> 
 				new UserEmailNotFoundException("Email not Found"));
 		UserResponse response=new UserResponse(
-				user.getId(),
+				user.getUserId(),
 				user.getEmail(),
 				user.getUsername(),
 				user.getDepartment());
@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService{
 		User updateUser=userRepository.save(user);
 		
 		UserResponse response=new UserResponse(
-				updateUser.getId(),
+				updateUser.getUserId(),
 				updateUser.getEmail(),
 				updateUser.getUsername(),
 				updateUser.getDepartment());

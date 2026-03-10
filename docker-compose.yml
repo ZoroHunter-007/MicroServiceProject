@@ -48,8 +48,17 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      redis:
-        condition: service_started
+    networks:
+      - microservice-network
+
+  order-app:
+    build: ./OrderService
+    container_name: order-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      mysql:
+        condition: service_healthy
     networks:
       - microservice-network
 

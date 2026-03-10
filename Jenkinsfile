@@ -30,10 +30,18 @@ pipeline {
             }
         }
 
+        stage('Build Order Service') {
+            steps {
+                dir('OrderService') {
+                    bat 'mvn clean package -DskipTests'
+                }
+            }
+        }
+
         stage('Stop Old Containers') {
             steps {
                 bat 'docker compose down --remove-orphans || exit 0'
-                bat 'docker rm -f redis-server mysql-db auth-container product-service || exit 0'
+                bat 'docker rm -f redis-server mysql-db auth-container product-service order-service || exit 0'
             }
         }
 
