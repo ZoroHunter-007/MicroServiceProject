@@ -10,7 +10,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch 'main', url 'https://github.com/ZoroHunter-007/MicroServiceProject.git'
+                git branch: 'main', url: 'https://github.com/ZoroHunter-007/MicroServiceProject.git'
             }
         }
 
@@ -32,7 +32,7 @@ pipeline {
 
         stage('Stop Old Containers') {
             steps {
-                bat 'docker compose down --remove-orphans  exit 0'
+                bat 'docker compose down --remove-orphans || exit 0'
             }
         }
 
