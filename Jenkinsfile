@@ -10,7 +10,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch 'main', url 'httpsgithub.comZoroHunter-007MicroServiceProject.git'
+                git branch 'main', url 'https://github.com/ZoroHunter-007/MicroServiceProject.git'
             }
         }
 
