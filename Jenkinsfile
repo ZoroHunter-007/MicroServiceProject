@@ -20,7 +20,7 @@ pipeline {
                     bat 'mvn clean package -DskipTests'
                 }
             }
-        
+        }
 
         stage('Build Product Application') {
             steps {
@@ -33,6 +33,7 @@ pipeline {
         stage('Stop Old Containers') {
             steps {
                 bat 'docker compose down --remove-orphans || exit 0'
+                bat 'docker rm -f redis-server mysql-db auth-container product-service || exit 0'
             }
         }
 
